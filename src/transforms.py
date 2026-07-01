@@ -9,9 +9,7 @@ These are the two functional-form assumptions at the heart of MMM:
                   (a dose-response / effect-heterogeneity assumption)
 
 This module is the *reference* NumPy implementation. Model 1 (frequentist
-benchmark) uses it directly. When the from-scratch PyMC model is built later,
-its PyTensor transforms must reproduce these exact numbers on the same input -
-that cross-check is what proves the Bayesian engine is trustworthy.
+benchmark) uses it directly.
 """
 
 import numpy as np
@@ -57,6 +55,9 @@ def geometric_adstock(x, theta, L=12, normalize=True):
 
     # np.convolve(x, weights)[t] = sum_l x[t-l] * weights[l], which is causal:
     # the value at t depends only on x at t and earlier. Trim to length T.
+    
+    # Convolution slides the weight kernel across x and, at each position, computes a sum of products. 
+    
     return np.convolve(x, weights)[: len(x)]
 
 
