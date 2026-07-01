@@ -7,7 +7,7 @@ are standing on solid ground.
 """
 
 import numpy as np
-from src.transforms import geometric_adstock, hill_saturation, logistic_saturation
+from transforms import geometric_adstock, hill_saturation, logistic_saturation
 
 
 def test_adstock_impulse_decays_geometrically():
