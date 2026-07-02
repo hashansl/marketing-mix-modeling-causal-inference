@@ -28,7 +28,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
-from src.transforms import geometric_adstock, hill_saturation  # noqa: E402
+from transforms import geometric_adstock, hill_saturation  # noqa: E402
 
 SEED = 42
 N_WEEKS = 156          # 3 years of weekly data
