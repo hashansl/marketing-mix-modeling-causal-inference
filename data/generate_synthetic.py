@@ -69,6 +69,7 @@ NOISE_SD = 18.0              # observation noise on revenue (~3-4% of revenue)
 
 def fourier_seasonality(t, period=52.13, n_terms=N_FOURIER, rng=None):
     """Smooth yearly seasonality as a sum of sine/cosine pairs."""
+    # Think of N_FOURIER as how much detail is allowed inside one year's shape 
     season = np.zeros_like(t, dtype=float)
     coeffs = []
     for k in range(1, n_terms + 1):
@@ -81,13 +82,19 @@ def fourier_seasonality(t, period=52.13, n_terms=N_FOURIER, rng=None):
     return season, coeffs
 
 
+# confounding injected - Generates one channels weekly spend
 def make_spend(name, p, confounded, demand_z, rng):
     """Generate a single channel's weekly spend series."""
+    # not confounded -  Spend is a free variable — statistically independent of demand, seasonality, trend, and revenue's baseline.
+    # creates set of random numbers(from a normal distribution) based on mean and sd given below - total size N_weeks
     base = rng.normal(p["spend_mean"], p["spend_sd"], size=N_WEEKS)
     if confounded:
         # demand pushes spend up multiplicatively: marketers spend more when
         # they expect high demand. This is the confounding mechanism.
+        # In the confounded world (confounded=True), the base spend gets multiplied by exp(demand_beta * demand_z). Now spend and demand are correlated by construction. 
+        # demand beta in the CHANNEL data - different channels would have different betas
         base = base * np.exp(p["demand_beta"] * demand_z)
+
     return np.clip(base, 0.5, None)  # keep strictly positive
 
 
@@ -101,6 +108,9 @@ def calibrate_betas(rng_seed):
     so the clean-world ROI lands on target by construction. These structural
     betas are then reused unchanged in the confounded world.
     """
+    # the design goal is: let me specify each channel's true ROI, and derive whatever β makes that happen. That inversion is exactly what calibrate_betas does.
+    
+    
     rng = np.random.default_rng(rng_seed)
     betas = {}
     for name, p in CHANNELS.items():
@@ -177,14 +187,18 @@ def main():
     trend = TREND_PER_WEEK * t
     season_raw, season_coeffs = fourier_seasonality(t, rng=rng)
     season = SEASON_AMPLITUDE * season_raw
+    # I want the seasonal signal to have a standard deviation of $40k-(40) around baseline.
 
     # hidden demand driver: its own smooth seasonal + trend signal + noise,
+    # It builds a hidden demand driver — a synthetic time series representing "how much people wanted to buy this week, apart from advertising." This variable will do two jobs later
+    # 1. Push spend up in high-demand weeks (in make_spend via demand_beta) — one arm of the backdoor.
+    # 2. Push revenue up directly (in build_variant via DEMAND_ON_SALES) — the other arm.
     # standardized. This is what confounds spend and sales in the confounded set.
     demand_raw = (
-        np.sin(2 * np.pi * t / 52.13)
-        + 0.4 * np.cos(2 * np.pi * 2 * t / 52.13)
-        + 0.01 * t
-        + rng.normal(0, 0.3, size=N_WEEKS)
+        np.sin(2 * np.pi * t / 52.13)                   # the annual demand cycle
+        + 0.4 * np.cos(2 * np.pi * 2 * t / 52.13)       # smaller secondary cycle
+        + 0.01 * t                                      # a slow upward drift
+        + rng.normal(0, 0.3, size=N_WEEKS)              # Standard-normal noise scaled down to std=0.3, one draw per week. This adds week-to-week randomness on top of the structural signal
     )
     demand_z = (demand_raw - demand_raw.mean()) / demand_raw.std()
 
