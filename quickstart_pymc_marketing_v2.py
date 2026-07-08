@@ -141,6 +141,10 @@ n_diverging = int(idata.sample_stats["diverging"].sum())
 print(f"\nmax R-hat:   {max_rhat:.3f}   (want < 1.05, ideally < 1.01)")
 print(f"divergences: {n_diverging}   (want 0)")
 
+
+# save
+idata.to_netcdf("outputs/model2_idata.nc")
+
 # ================================================ recovered ROI vs truth ==
 contrib = mmm.compute_channel_contribution_original_scale()
 total_contrib = contrib.sum(dim="date")
