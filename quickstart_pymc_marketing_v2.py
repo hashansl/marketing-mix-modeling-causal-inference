@@ -27,21 +27,16 @@ WHAT'S DIFFERENT FROM v1
    tail (as it can with ratio quantities like ROI), the median is a much
    more honest point estimate.
 
-EXPECTED BEHAVIOR
------------------
-Compared to v1, v2 should show:
-  - Substantially fewer divergences (target: 0)
-  - R-hat < 1.05 across all parameters (target: < 1.01)
-  - Narrower 95% ROI intervals - the wildly-wide intervals of v1 came from
-    posterior spread into implausible regions that these priors close off
-  - ROI point estimates in the same ballpark as truth, with intervals that
-    contain the true value
+OUTPUTS SAVED (both small, safe to commit)
+------------------------------------------
+  outputs/model2_posterior.nc   parameter posteriors only (a few MB)
+  outputs/model2_roi.nc         per-channel ROI samples (tiny)
+  outputs/figures/pymc_marketing_quickstart_v2.png
 
 RUNTIME
 -------
-Roughly 5-10 minutes on a laptop with 4 CPU cores. Higher target_accept
-means each draw needs more evaluations. Set SMOKE_TEST=True for a quick
-sanity check that runs in ~2 minutes.
+Roughly 5-12 minutes on a laptop with 4 CPU cores. Set SMOKE_TEST=True for a
+quick sanity check that runs in ~2 minutes.
 
 Run:  python quickstart_pymc_marketing_v2.py
 """
@@ -141,14 +136,22 @@ n_diverging = int(idata.sample_stats["diverging"].sum())
 print(f"\nmax R-hat:   {max_rhat:.3f}   (want < 1.05, ideally < 1.01)")
 print(f"divergences: {n_diverging}   (want 0)")
 
-
-# save
-idata.to_netcdf("outputs/model2_idata.nc")
+# ============================================ save slim posterior (few MB) ==
+# NOTE: idata.to_netcdf() would save ~100MB because it includes the
+# posterior-predictive and per-observation arrays. We keep only the
+# posterior group (the parameter samples), which is all the figures need.
+az.InferenceData(posterior=idata.posterior).to_netcdf(
+    os.path.join(HERE, "outputs", "model2_posterior.nc"))
 
 # ================================================ recovered ROI vs truth ==
 contrib = mmm.compute_channel_contribution_original_scale()
 total_contrib = contrib.sum(dim="date")
 total_spend = df[spend_cols].sum().values
+
+# save per-channel ROI samples (draws x channel - tiny) for the figures
+roi_da = total_contrib / total_spend
+roi_da.to_netcdf(os.path.join(HERE, "outputs", "model2_roi.nc"))
+print("saved outputs/model2_posterior.nc and outputs/model2_roi.nc")
 
 print("\n--- ROI: fitted vs true (clean synthetic) ---")
 print(f"{'channel':<10s} {'true':>7s}   {'median':>7s}   {'95% CI':>18s}")
@@ -186,7 +189,7 @@ ax.scatter(x_pos, truths, marker="D", s=80, color="#BA7517", zorder=5,
            label="true ROI")
 ax.set_xticks(x_pos); ax.set_xticklabels(channels)
 ax.set_ylabel("ROI")
-ax.set_title(f"PyMC-Marketing v2 (tightened priors): fitted vs true ROI")
+ax.set_title("PyMC-Marketing v2 (tightened priors): fitted vs true ROI")
 ax.grid(alpha=0.3); ax.legend()
 fig.tight_layout()
 out = os.path.join(FIG_DIR, "pymc_marketing_quickstart_v2.png")
