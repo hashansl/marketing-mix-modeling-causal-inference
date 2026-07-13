@@ -1,5 +1,3 @@
-Here is the complete, corrected Markdown code for your `README.md` file. You can copy and paste this directly into your repository:
-
 ```markdown
 # Marketing Mix Modeling as Causal Inference
 
