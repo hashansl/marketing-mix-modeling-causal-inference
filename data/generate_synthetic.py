@@ -12,12 +12,11 @@ Produces two datasets from the SAME channel parameters:
                               WITHOUT controlling for demand and channel ROI
                               is biased UP; fit WITH it and the bias closes.
 
-Because we set every parameter, we can compute the TRUE ROI of each channel
+Because we set every parameter, we can compute the TRUE ROI of each channel 
 from its own realized contribution. That ground truth (saved to
 true_params.json) is what the recovery and confounding experiments score
 against - the whole reason for simulating rather than only using real data.
 
-Run:  python data/generate_synthetic.py
 """
 
 import json
@@ -64,7 +63,7 @@ TREND_PER_WEEK = 0.6          # gentle upward drift
 SEASON_AMPLITUDE = 40.0       # yearly seasonality strength
 N_FOURIER = 3                 # number of Fourier pairs for seasonality
 DEMAND_ON_SALES = 45.0        # how much the hidden demand driver moves revenue
-NOISE_SD = 18.0              # observation noise on revenue (~3-4% of revenue)
+NOISE_SD = 18.0               # observation noise on revenue (~3-4% of revenue)
 
 
 def fourier_seasonality(t, period=52.13, n_terms=N_FOURIER, rng=None):
@@ -187,6 +186,7 @@ def main():
     trend = TREND_PER_WEEK * t
     season_raw, season_coeffs = fourier_seasonality(t, rng=rng)
     season = SEASON_AMPLITUDE * season_raw
+
     # I want the seasonal signal to have a standard deviation of $40k-(40) around baseline.
 
     # hidden demand driver: its own smooth seasonal + trend signal + noise,
@@ -194,6 +194,7 @@ def main():
     # 1. Push spend up in high-demand weeks (in make_spend via demand_beta) — one arm of the backdoor.
     # 2. Push revenue up directly (in build_variant via DEMAND_ON_SALES) — the other arm.
     # standardized. This is what confounds spend and sales in the confounded set.
+
     demand_raw = (
         np.sin(2 * np.pi * t / 52.13)                   # the annual demand cycle
         + 0.4 * np.cos(2 * np.pi * 2 * t / 52.13)       # smaller secondary cycle
@@ -203,6 +204,7 @@ def main():
     demand_z = (demand_raw - demand_raw.mean()) / demand_raw.std()
 
     # derive structural betas from target ROIs (calibrated on clean-world spend)
+    # as explained in the writeup!
     betas = calibrate_betas(SEED)
 
     out_dir = os.path.join(os.path.dirname(__file__))

@@ -8,8 +8,7 @@ These are the two functional-form assumptions at the heart of MMM:
     saturation  - how the marginal effect of spend shrinks as spend grows
                   (a dose-response / effect-heterogeneity assumption)
 
-This module is the *reference* NumPy implementation. Model 1 (frequentist
-benchmark) uses it directly.
+We don't use delayed adstock for our data generation - for the simplicity.
 """
 
 import numpy as np
@@ -39,7 +38,7 @@ def geometric_adstock(x, theta, L=12, normalize=True):
         Maximum lag (carryover window) in weeks.
     normalize : bool
         If True, weights sum to 1 so the adstocked series keeps the same
-        scale as the input (a weighted moving average). Recommended.
+        scale as the input (a weighted moving average).
 
     Returns
     -------
@@ -53,9 +52,7 @@ def geometric_adstock(x, theta, L=12, normalize=True):
     if normalize:
         weights = weights / weights.sum()
 
-    # np.convolve(x, weights)[t] = sum_l x[t-l] * weights[l], which is causal:
-    # the value at t depends only on x at t and earlier. Trim to length T.
-    
+    # The value at t depends only on x at t and earlier. Trim to length T.
     # Convolution slides the weight kernel across x and, at each position, computes a sum of products. 
     
     return np.convolve(x, weights)[: len(x)]
@@ -87,7 +84,7 @@ def hill_saturation(x, alpha, kappa):
     x = np.asarray(x, dtype=float)
     if alpha <= 0 or kappa <= 0:
         raise ValueError("alpha and kappa must be positive")
-    # guard against 0**negative etc.; x is expected non-negative
+    # guard against 0**negative etc.; x is expected non-negative as stated
     xa = np.power(np.clip(x, 0, None), alpha)
     return xa / (kappa ** alpha + xa)
 
@@ -116,6 +113,41 @@ def logistic_saturation(x, lam):
     return (1 - np.exp(-lam * x)) / (1 + np.exp(-lam * x))
 
 def delayed_adstock(x, alpha, theta, L, normalize=False):
+
+    """
+    THIS IS ONLY USED FOR FIGURE GENERATION ONLY
+
+    Delayed adstock: the effect can peak AFTER the spend week, not just at it.
+    
+    Unlike geometric adstock (peak at lag 0, monotone decay), this form
+    creates a bell-shaped kernel that peaks at lag = theta. The effect
+    builds up, peaks, then decays — matching channels like TV where
+    consumers see an ad but don't act for several weeks.
+    
+    Parameters
+    ----------
+    x : array-like
+        Spend series for a single channel (length T).
+    alpha : float in (0, 1)
+        Controls the WIDTH of the bell. Closer to 1 = wider bell (longer
+        memory); closer to 0 = narrow bell (sharp peak, fast decay).
+        Think of it as "how quickly does the effect fade as you move
+        away from the peak?"
+    theta : float >= 0
+        The PEAK LAG — the week (after spend) when the effect is strongest.
+        theta=0 recovers something like geometric adstock (peak at spend week).
+        theta=2 means the effect peaks 2 weeks after the spend.
+        This is the parameter that makes it "delayed."
+    L : int
+        Maximum lag (carryover window) in weeks. Kernel has L weights.
+    normalize : bool
+        If True, weights sum to 1 (weighted average). Default False.
+    
+    Returns
+    -------
+    np.ndarray of length T : the adstocked series.
+    """
+
     weights = np.array([alpha**(l-theta)**2 for l in range(L)])
     if normalize:
         weights = weights / weights.sum()
