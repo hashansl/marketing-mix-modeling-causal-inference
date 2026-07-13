@@ -1,4 +1,4 @@
-# Marketing Mix Modeling as Causal Inference
+# Can We Trust Marketing ROI? A Synthetic-Data Study of Confounding and Experimental Calibration
 
 **BZAN 593 — Independent Study**
 
