@@ -1,4 +1,3 @@
-```markdown
 # Marketing Mix Modeling as Causal Inference
 
 **BZAN 593 — Independent Study**
