@@ -114,3 +114,10 @@ def logistic_saturation(x, lam):
     if lam <= 0:
         raise ValueError("lam must be positive")
     return (1 - np.exp(-lam * x)) / (1 + np.exp(-lam * x))
+
+def delayed_adstock(x, alpha, theta, L, normalize=False):
+    weights = np.array([alpha**(l-theta)**2 for l in range(L)])
+    if normalize:
+        weights = weights / weights.sum()
+    adstocked_x = np.convolve(x, weights)[:len(x)]
+    return adstocked_x
