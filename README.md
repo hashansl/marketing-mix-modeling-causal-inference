@@ -1,3 +1,5 @@
+Here is the complete, corrected Markdown code for your `README.md` file. You can copy and paste this directly into your repository:
+
 ```markdown
 # Marketing Mix Modeling as Causal Inference
 
@@ -19,9 +21,7 @@ Can a Bayesian Marketing Mix Model recover the true causal effect (ROI) of each 
 
 ## Project Structure
 
-
-```
-
+```text
 MARKETING-MIX-MODELING-CAUSAL-INFERENCE/
 │
 ├── data/
@@ -60,7 +60,7 @@ MARKETING-MIX-MODELING-CAUSAL-INFERENCE/
 Two datasets from the same structural model, differing only in how spend is assigned:
 
 | Property | Clean | Confounded |
-|----------|-------|------------|
+| --- | --- | --- |
 | Weeks | 156 (3 years) | 156 (3 years) |
 | Channels | 5 (tv, search, social, display, email) | 5 (same) |
 | Spend assignment | random (independent of demand) | driven by hidden demand |
@@ -70,15 +70,15 @@ Two datasets from the same structural model, differing only in how spend is assi
 
 ### Robyn (`dt_simulated_weekly` from Meta's Robyn package)
 
-- 208 weeks (2015-11 to 2019-11)
-- 5 paid channels: tv, ooh, print, facebook, search (pulsed: ~55% zero weeks)
-- Controls: `competitor_sales_B` ($r=+0.92$ with revenue), `events`, `newsletter`
-- No ground truth — used for applied validation, not parameter recovery
+* 208 weeks (2015-11 to 2019-11)
+* 5 paid channels: tv, ooh, print, facebook, search (pulsed: ~55% zero weeks)
+* Controls: `competitor_sales_B` ($r=+0.92$ with revenue), `events`, `newsletter`
+* No ground truth — used for applied validation, not parameter recovery
 
 ## Models
 
 | Model | Method | Transforms | Purpose |
-|-------|--------|------------|---------|
+| --- | --- | --- | --- |
 | **Model 0** | Naive OLS | none | Strawman: cost of ignoring adstock/saturation |
 | **Model 1** | Oracle OLS | true params from DGP | Upper bound: what transforms buy (not achievable in practice) |
 | **Model 2** | Bayesian MMM (PyMC-Marketing) | learned from data | Realistic method: estimates everything with uncertainty |
