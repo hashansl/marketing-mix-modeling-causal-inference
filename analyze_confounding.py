@@ -73,8 +73,13 @@ ax.errorbar(x + w, a_med, yerr=[np.array(a_med)-np.array(a_lo), np.array(a_hi)-n
             fmt="none", ecolor="#0d3a66", capsize=3)
 ax.set_xticks(x); ax.set_xticklabels(IDENTIFIED)
 ax.set_ylabel("ROI")
-ax.set_title("Confounding bias — identified channels only\n"
-             "(display/email omitted: unidentifiable regardless of adjustment)")
+
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
+# ax.set_title("Confounding bias — identified channels only\n"
+            #  "(display/email omitted: unidentifiable regardless of adjustment)")
 ax.legend(fontsize=9); ax.grid(alpha=0.3, axis="y")
 fig.tight_layout()
 out1 = os.path.join(FIG, "confounding_identified_only.png")
@@ -108,7 +113,12 @@ ax.hist(adj_total / 1e3, bins=40, alpha=0.55, color="#185FA5",
 ax.axvline(true_total_contrib / 1e3, color="#333", lw=2.2, ls="--", label="true total")
 ax.set_xlabel("Total media contribution ($M, over 3 years)")
 ax.set_ylabel("posterior density")
-ax.set_title("Aggregate media contribution: naive overshoots, adjustment recovers")
+# ax.set_title("Aggregate media contribution: naive overshoots, adjustment recovers")
+
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
 ax.legend(fontsize=9); ax.grid(alpha=0.3)
 fig.tight_layout()
 out2 = os.path.join(FIG, "confounding_aggregate.png")
@@ -134,8 +144,12 @@ for i in range(len(labels)):
         val = corr.iloc[i, j]
         ax.text(j, i, f"{val:.2f}", ha="center", va="center",
                 color="white" if val < 0.6 else "black", fontsize=8)
-ax.set_title("Channel spend correlations (confounded data)\n"
-             "Correlated channels share the confounder's effect")
+# ax.set_title("Channel spend correlations (confounded data)\n"
+            #  "Correlated channels share the confounder's effect")
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
 fig.colorbar(im, ax=ax, fraction=0.046)
 fig.tight_layout()
 out3 = os.path.join(FIG, "confounding_channel_correlation.png")

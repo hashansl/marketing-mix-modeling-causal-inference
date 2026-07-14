@@ -67,11 +67,11 @@ ax.axvline(true_roi[CALIB_CH], color="#333", lw=2.2, ls="--",
 ax.axvline(LIFT_TEST_ROI, color="#BA7517", lw=1.6, ls=":",
            label=f"lift-test estimate = {LIFT_TEST_ROI} ± {LIFT_TEST_SE}")
 ax.set_xlabel(f"ROI ({CALIB_CH})")
-ax.set_ylabel("posterior density")
-ax.set_title(f"Lift-test calibration on {CALIB_CH}:\n"
-             f"experimental prior tightens the posterior around truth "
-             f"despite the backdoor being open")
-ax.legend(fontsize=9); ax.grid(alpha=0.3)
+ax.set_ylabel("Posterior density")
+# ax.set_title(f"Lift-test calibration on {CALIB_CH}:\n"
+            #  f"experimental prior tightens the posterior around truth "
+            #  f"despite the backdoor being open")
+ax.legend(fontsize=12); ax.grid(alpha=0.3)
 fig.tight_layout()
 out1 = os.path.join(FIG, "calibration_search.png")
 fig.savefig(out1, dpi=130, bbox_inches="tight"); print(f"saved {out1}")
@@ -104,11 +104,16 @@ ax.axvspan(x[channels.index(CALIB_CH)] - 0.5, x[channels.index(CALIB_CH)] + 0.5,
 
 ax.set_xticks(x); ax.set_xticklabels(channels)
 ax.set_ylabel("ROI (median ± 95% CI)")
-ax.set_title(f"Calibrating {CALIB_CH} tightens its posterior;\n"
-             f"other channels: see whether they moved as a side effect")
+# ax.set_title(f"Calibrating {CALIB_CH} tightens its posterior;\n"
+            #  f"other channels: see whether they moved as a side effect")
+
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
 ymax = max(6, truths.max() * 2.4)
 ax.set_ylim(0, ymax)
-ax.legend(fontsize=9); ax.grid(alpha=0.3, axis="y")
+ax.legend(fontsize=12); ax.grid(alpha=0.3, axis="y")
 fig.tight_layout()
 out2 = os.path.join(FIG, "calibration_summary.png")
 fig.savefig(out2, dpi=130, bbox_inches="tight"); print(f"saved {out2}")

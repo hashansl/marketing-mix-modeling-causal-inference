@@ -90,18 +90,18 @@ for r, param in enumerate(params_to_plot):
             # mark whether the true value is inside the 95% CI
             lo, hi = np.percentile(s, [2.5, 97.5])
             inside = lo <= tv <= hi
-            ax.text(0.5, 0.92, "covered" if inside else "MISSED",
-                    transform=ax.transAxes, ha="center", fontsize=8,
-                    color="#1a7a3a" if inside else "#b00")
+            # ax.text(0.5, 0.92, "covered" if inside else "MISSED",
+            #         transform=ax.transAxes, ha="center", fontsize=15,
+            #         color="#1a7a3a" if inside else "#b00")
         if r == 0:
             ax.set_title(ch, fontsize=11)
         if c == 0:
-            ax.set_ylabel(param_titles[param], fontsize=9)
+            ax.set_ylabel(param_titles[param], fontsize=12)
         ax.set_yticks([])
         ax.tick_params(labelsize=7)
 
-fig.suptitle("Parameter recovery: posterior (blue) vs true value (orange)",
-             fontsize=12, y=1.01)
+# fig.suptitle("Parameter recovery: posterior (blue) vs true value (orange)",
+            #  fontsize=12, y=1.01)
 fig.tight_layout()
 out1 = os.path.join(FIG_DIR, "recovery_parameters.png")
 fig.savefig(out1, dpi=130, bbox_inches="tight")
@@ -124,17 +124,17 @@ for c, ch in enumerate(channels):
     ax.axvline(med, color="#185FA5", lw=1.6, ls="--", label="posterior median")
     lo, hi = np.percentile(s, [2.5, 97.5])
     inside = lo <= tv <= hi
-    ax.set_title(f"{ch}\ntrue={tv:.2f}  med={med:.2f}", fontsize=10)
-    ax.text(0.5, 0.9, "covered" if inside else "MISSED",
-            transform=ax.transAxes, ha="center", fontsize=8,
-            color="#1a7a3a" if inside else "#b00")
+    ax.set_title(f"{ch}\ntrue={tv:.2f}  med={med:.2f}", fontsize=15)
+    # ax.text(0.5, 0.9, "covered" if inside else "MISSED",
+    #         transform=ax.transAxes, ha="center", fontsize=8,
+    #         color="#1a7a3a" if inside else "#b00")
     ax.set_yticks([]); ax.tick_params(labelsize=7)
-    if c == 0:
+    if c == 4:
         ax.set_ylabel("density", fontsize=9)
-        ax.legend(fontsize=7, loc="upper right")
+        ax.legend(fontsize=12, loc="upper right")
 
-fig.suptitle("ROI recovery: posterior (green), true (orange), median (blue dashed)",
-             fontsize=12, y=1.03)
+# fig.suptitle("ROI recovery: posterior (green), true (orange), median (blue dashed)",
+            #  fontsize=12, y=1.03)
 fig.tight_layout()
 out2 = os.path.join(FIG_DIR, "recovery_roi.png")
 fig.savefig(out2, dpi=130, bbox_inches="tight")

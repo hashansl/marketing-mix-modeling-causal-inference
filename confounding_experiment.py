@@ -72,7 +72,7 @@ def make_config():
 if SMOKE_TEST:
     draws, tune, chains = 250, 250, 2
 else:
-    draws, tune, chains = 1000, 1000, 4
+    draws, tune, chains = 1000, 2000, 4
 
 
 def fit_and_roi(control_columns, tag):
@@ -90,7 +90,7 @@ def fit_and_roi(control_columns, tag):
     X = df[["date"] + control_columns + spend_cols]
     y = df["revenue"]
     idata = mmm.fit(X=X, y=y, draws=draws, tune=tune, chains=chains,
-                    cores=min(chains, 4), target_accept=0.98, max_treedepth=12,
+                    cores=min(chains, 4), target_accept=0.99, max_treedepth=13,
                     random_seed=42, progressbar=False)
     n_div = int(idata.sample_stats["diverging"].sum())
     print(f"  divergences: {n_div}")

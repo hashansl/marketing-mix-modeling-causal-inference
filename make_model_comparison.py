@@ -83,17 +83,22 @@ ax.errorbar(x + w, [m2_med[ch] for ch in channels],
 
 ax.set_xticks(x); ax.set_xticklabels(channels, fontsize=11)
 ax.set_ylabel("ROI", fontsize=11)
-ax.set_title("Model comparison: ROI estimate vs truth, by channel", fontsize=12)
+# ax.set_title("Model comparison: ROI estimate vs truth, by channel", fontsize=12)
 # cap y so the Bayesian tails don't blow out the scale; note clipping
+
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=12)
+
 ymax = max(6, max(true_roi.values()) * 1.6)
 ax.set_ylim(0, ymax)
-ax.legend(fontsize=9, loc="upper right")
+ax.legend(fontsize=12, loc="upper right")
 ax.grid(alpha=0.3, axis="y")
 # annotate any Model-2 upper CI that got clipped
 for c, ch in enumerate(channels):
     if m2_hi[ch] > ymax:
         ax.annotate(f"CI to {m2_hi[ch]:.0f}", (x[c] + w, ymax * 0.97),
-                    fontsize=7, ha="center", color="#185FA5", rotation=90,
+                    fontsize=12, ha="center", color="#185FA5", rotation=90,
                     va="top")
 fig.tight_layout()
 out1 = os.path.join(FIG_DIR, "model_comparison.png")
@@ -117,7 +122,7 @@ for b, v in zip(bars, rmse_vals.values()):
     ax.text(b.get_x() + b.get_width() / 2, v + 0.02, f"{v:.3f}",
             ha="center", fontsize=10)
 ax.set_ylabel("ROI RMSE vs truth (lower = better)", fontsize=11)
-ax.set_title("Overall ROI recovery error by model", fontsize=12)
+# ax.set_title("Overall ROI recovery error by model", fontsize=12)
 ax.grid(alpha=0.3, axis="y")
 fig.tight_layout()
 out2 = os.path.join(FIG_DIR, "model_comparison_rmse.png")

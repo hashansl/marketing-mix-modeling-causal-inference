@@ -108,9 +108,9 @@ y = df["revenue"]
 if SMOKE_TEST:
     draws, tune, chains = 250, 250, 2
 else:
-    draws, tune, chains = 1000, 1000, 4
-target_accept = 0.98
-max_treedepth = 12
+    draws, tune, chains = 1000, 2000, 4
+target_accept = 0.99
+max_treedepth = 13
 
 print(f"sampling: draws={draws}, tune={tune}, chains={chains}")
 print(f"          target_accept={target_accept}, max_treedepth={max_treedepth}")
@@ -135,6 +135,22 @@ max_rhat = float(summary["r_hat"].max())
 n_diverging = int(idata.sample_stats["diverging"].sum())
 print(f"\nmax R-hat:   {max_rhat:.3f}   (want < 1.05, ideally < 1.01)")
 print(f"divergences: {n_diverging}   (want 0)")
+
+# --- PAIR PLOT CODE ---
+if n_diverging > 0:
+    print("\nDivergences detected! Plotting adstock vs saturation for TV...")
+    az.plot_pair(
+        idata,
+        var_names=["adstock_alpha", "saturation_kappa"],
+        coords={"channel": ["tv_spend"]}, 
+        kind="scatter",
+        divergences=True,
+        scatter_kwargs={"alpha": 0.1}
+    )
+    plt.title("TV: Adstock vs Saturation (Divergences Highlighted)")
+    plt.tight_layout()
+    plt.savefig(os.path.join(FIG_DIR, "divergences_tv_adstock_saturation.png"), dpi=130)
+# --------------------------
 
 # ============================================ save slim posterior (few MB) ==
 # NOTE: idata.to_netcdf() would save ~100MB because it includes the
@@ -188,10 +204,15 @@ ax.errorbar(x_pos, med,
 ax.scatter(x_pos, truths, marker="D", s=80, color="#BA7517", zorder=5,
            label="true ROI")
 ax.set_xticks(x_pos); ax.set_xticklabels(channels)
-ax.set_ylabel("ROI")
-ax.set_title("PyMC-Marketing v2 (tightened priors): fitted vs true ROI")
+ax.set_xticklabels(channels, fontsize=14)           # <-- Kept fontsize here
+ax.set_ylabel("ROI", fontsize=18)
+# ax.set_title("PyMC-Marketing v2 (tightened priors): fitted vs true ROI")
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
 ax.grid(alpha=0.3); ax.legend()
 fig.tight_layout()
-out = os.path.join(FIG_DIR, "pymc_marketing_quickstart_v2.png")
+out = os.path.join(FIG_DIR, "fitted_vs_true_roi.png")
 fig.savefig(out, dpi=130, bbox_inches="tight")
 print(f"\nsaved {out}")

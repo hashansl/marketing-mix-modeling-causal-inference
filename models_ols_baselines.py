@@ -4,8 +4,10 @@ Model 0 and Model 1 - the frequentist ladder that sets up Model 2.
 Model 0 (naive OLS)
 -------------------
     revenue ~ raw_spend_c + trend + Fourier
-No adstock, no saturation. Answers: does the model recover ROI if we ignore
-carryover and diminishing returns?  (Answer: no. That's the point.)
+No adstock, no saturation. 
+
+Answers: does the model recover ROI if we ignore
+carryover and diminishing returns?  
 
 Model 1 (oracle OLS with transforms)
 ------------------------------------
@@ -13,9 +15,9 @@ Model 1 (oracle OLS with transforms)
              + trend + Fourier
 Same OLS, but spend is first put through geometric adstock and Hill
 saturation using the TRUE parameters (theta*, alpha*, kappa* from
-true_params.json).  Answers: does OLS work once we have the right shapes?
-(Answer: mostly yes. This isolates what the transforms buy vs what the
-Bayesian machinery buys.)
+true_params.json).  
+
+Answers: does OLS work once we have the right shapes?
 
 Both models are scored against the true ROI recorded in true_params.json.
 
@@ -99,6 +101,10 @@ roi_m0, intercept_m0, yhat_m0, beta_m0 = ols_roi(
 
 # =============================================================== Model 1 ==
 # Oracle OLS: apply adstock + Hill saturation with the TRUE parameters.
+
+# If we don't transform the raw spend, our model will look at weeks with $0 spend but high sales and falsely assume your ads didn't work. 
+# The transformation aligns the cost with when the impact actually happens.
+
 transformed = np.zeros_like(spend_matrix, dtype=float)
 for i, ch in enumerate(channels):
     p = channel_params[ch]

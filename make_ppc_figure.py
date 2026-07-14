@@ -81,10 +81,15 @@ ax.fill_between(df["date"], lo, hi, color="#185FA5", alpha=0.25,
                 label="90% predictive band")
 ax.plot(df["date"], med, color="#185FA5", lw=1.5, label="predicted median")
 ax.plot(df["date"], actual, color="#BA7517", lw=1.3, label="actual revenue")
-ax.set_title(f"Posterior predictive check: {inside:.0f}% of weeks inside the 90% band "
-             f"(target ~90%)", fontsize=12)
-ax.set_ylabel("revenue ($000)"); ax.set_xlabel("date")
-ax.legend(fontsize=9); ax.grid(alpha=0.3)
+# ax.set_title(f"Posterior predictive check: {inside:.0f}% of weeks inside the 90% band "
+            #  f"(target ~90%)", fontsize=12)
+ax.set_ylabel("Revenue ($000)", fontsize=12); ax.set_xlabel("Date", fontsize=12)
+
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
+ax.legend(fontsize=12); ax.grid(alpha=0.3)
 fig.tight_layout()
 out = os.path.join(FIG_DIR, "posterior_predictive_check.png")
 fig.savefig(out, dpi=130, bbox_inches="tight")
@@ -95,10 +100,14 @@ fig, ax = plt.subplots(figsize=(5.5, 5.5))
 ax.scatter(actual, med, s=25, color="#185FA5", alpha=0.6)
 lims = [min(actual.min(), med.min()), max(actual.max(), med.max())]
 ax.plot(lims, lims, color="#BA7517", lw=1.5, ls="--", label="perfect fit")
-ax.set_xlabel("actual revenue"); ax.set_ylabel("predicted revenue (median)")
+ax.set_xlabel("Actual revenue", fontsize=12); ax.set_ylabel("Predicted revenue (median)", fontsize=12)
 r2 = 1 - np.sum((actual - med)**2) / np.sum((actual - actual.mean())**2)
-ax.set_title(f"Predicted vs actual (R^2 = {r2:.3f})", fontsize=12)
-ax.legend(fontsize=9); ax.grid(alpha=0.3)
+# ax.set_title(f"Predicted vs actual (R^2 = {r2:.3f})", fontsize=12)
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
+ax.legend(fontsize=12); ax.grid(alpha=0.3)
 fig.tight_layout()
 out2 = os.path.join(FIG_DIR, "posterior_predictive_scatter.png")
 fig.savefig(out2, dpi=130, bbox_inches="tight")

@@ -65,8 +65,12 @@ ax.errorbar(x, T["naive_med"], yerr=[T["naive_med"]-T["naive_lo"], T["naive_hi"]
 ax.errorbar(x + w, T["adj_med"], yerr=[T["adj_med"]-T["adj_lo"], T["adj_hi"]-T["adj_med"]],
             fmt="none", ecolor="#0d3a66", capsize=3, lw=1)
 ax.set_xticks(x); ax.set_xticklabels(channels, fontsize=11)
-ax.set_ylabel("ROI"); ax.set_title(
-    "Confounding bias: naive (open backdoor) overshoots true ROI; adjustment recovers it")
+# ax.set_ylabel("ROI"); ax.set_title(
+    # "Confounding bias: naive (open backdoor) overshoots true ROI; adjustment recovers it")
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
 ymax = max(6, T["true"].max() * 2.2)
 ax.set_ylim(0, ymax)
 ax.legend(fontsize=9); ax.grid(alpha=0.3, axis="y")
@@ -86,9 +90,14 @@ for _, r in T.iterrows():
     ax.annotate(r["channel"], (r["demand_beta"], r["naive_med"]-r["true"]),
                 fontsize=9, xytext=(5, 5), textcoords="offset points")
 ax.axhline(0, color="gray", lw=1, ls="--")
-ax.set_xlabel("demand_beta  (strength of spend-demand confounding link)")
-ax.set_ylabel("naive ROI bias  (naive median - true)")
-ax.set_title("Confounding bias grows with the strength of the backdoor path")
+ax.set_xlabel("demand_beta  (strength of spend-demand confounding link)", fontsize=8)
+ax.set_ylabel("naive ROI bias  (naive median - true)", fontsize=8)
+# ax.set_title("Confounding bias grows with the strength of the backdoor path")
+
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
 ax.grid(alpha=0.3)
 fig.tight_layout()
 out2 = os.path.join(FIG, "confounding_bias_vs_beta.png")
