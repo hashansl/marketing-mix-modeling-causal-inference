@@ -1,7 +1,7 @@
 """
-Build the parameter-recovery figure - the centerpiece exhibit of Week 2.
+Build the parameter-recovery figures
 
-Reads the slim files saved by quickstart_pymc_marketing_v2.py:
+Reads the slim files saved by quickstart_pymc_marketing.py:
   outputs/model2_posterior.nc   parameter posteriors
   outputs/model2_roi.nc         per-channel ROI samples
 
@@ -13,8 +13,6 @@ Produces two figures:
 
   outputs/figures/recovery_roi.png
       Per-channel ROI: posterior distribution with true ROI marked.
-
-No sampling - runs in seconds. Re-runnable as often as you like.
 
 Run:  python make_recovery_figure.py
 """

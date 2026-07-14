@@ -2,14 +2,19 @@
 Confounding bias figure - reads the slim outputs from confounding_experiment.py
 and builds the bias table + bar chart.
 
-  outputs/confounded_roi_naive.nc      (backdoor open)
-  outputs/confounded_roi_adjusted.nc   (backdoor closed)
+Reads:
+  data/true_params.json                ground truth parameters containing true channel ROIs
+  data/synthetic_confounded.csv        confounded training dataset (used to dynamically read active channels)
+  outputs/confounded_roi_naive.nc      naive posterior ROI samples (backdoor path left open)
+  outputs/confounded_roi_adjusted.nc   adjusted posterior ROI samples (backdoor path closed via controls)
 
 Produces:
   outputs/figures/confounding_bias.png       three bars/channel: true, naive, adjusted
   outputs/figures/confounding_bias_vs_beta.png  bias magnitude vs demand_beta
+  outputs/confounded_roi_naive.nc      (backdoor open)
+  outputs/confounded_roi_adjusted.nc   (backdoor closed)
 
-No sampling. Run:  python make_confounding_figure.py
+Run:  python make_confounding_figure.py
 """
 import json, os
 import numpy as np, pandas as pd, xarray as xr

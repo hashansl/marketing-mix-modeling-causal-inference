@@ -1,44 +1,69 @@
 """
-PyMC-Marketing quickstart, v2 (fixed priors + sampler settings).
+PyMC-Marketing quickstart -- Model 2 (Bayesian MMM)
 
-WHAT'S DIFFERENT FROM v1
-------------------------
-1. The library uses MaxAbsScaler internally: spend and revenue live in [0, 1].
-   Priors are set to be sensible ON THAT SCALE, not the raw scale.
+See Methods §2.3.3 of the paper.
 
-2. saturation_kappa gets a Beta(2, 2) prior instead of HalfNormal(1.5).
-   Reason: kappa (half-saturation) on scaled data must be in [0, 1] AND real
-   MMMs almost always operate on the curved part of the response (spend not
-   deeply saturated, not barely started). Beta(2,2) is bounded, centered on
-   0.5, with moderate spread - the right shape given what we know.
-   HalfNormal(1.5) was letting the sampler wander into implausible regions.
+Fits a Bayesian Marketing Mix Model on the clean synthetic dataset. Unlike
+Model 1 (oracle OLS), this model estimates the adstock and saturation
+parameters jointly with the channel coefficients, and reports full posterior
+uncertainty for every quantity.
 
-3. saturation_slope (the Hill shape / alpha parameter) gets Gamma(3, 1):
-   mode near 2, tail out to ~5. Real MMM slopes are usually 1-4.
+MODEL SPECIFICATION
+-------------------
+For channel c and week t, the model is:
 
-4. saturation_beta stays HalfNormal but tighter (sigma=1 instead of 1.5).
-   The channel effect on scaled revenue is bounded above by 1, so we don't
-   need mass out at 5+.
+    Likelihood:
+        y_t ~ Normal(mu_t, sigma^2)
 
-5. Sampler: target_accept=0.98 (up from 0.95) and max_treedepth=12 (up from
-   10). These help NUTS navigate the Hill-saturation ridge.
+    Mean structure:
+        mu_t = beta_0                                     (intercept)
+             + tau * t                                    (linear trend)
+             + sum_{k=1..K} [gamma_k sin(2*pi*k*t / P) + delta_k cos(2*pi*k*t / P)]
+                                                          (Fourier seasonality, K=3, P=52.13)
+             + sum_{c=1..C} beta_c * s_{c,t}              (media contributions)
 
-6. Report POSTERIOR MEDIAN, not mean. When the posterior has a long right
-   tail (as it can with ratio quantities like ROI), the median is a much
-   more honest point estimate.
+    Adstock (geometric, causal weighted convolution):
+        a_{c,t} = sum_{l=0..L} theta_c^l * x_{c,t-l}  /  sum_{l=0..L} theta_c^l
+
+    Saturation (Hill):
+        s_{c,t} = a_{c,t}^alpha_c  /  (kappa_c^alpha_c + a_{c,t}^alpha_c)
+
+    Priors (specified on the internal [0,1] MaxAbsScaler scale):
+        theta_c ~ Beta(1, 3)                              (adstock retention)
+        alpha_c ~ Gamma(3, 1)                             (Hill shape)
+        kappa_c ~ Beta(2, 2)                              (half-saturation)
+        beta_c  ~ HalfNormal(1)                           (channel coefficient)
+        beta_0  ~ Normal(0, 2)                            (intercept)
+        tau     ~ Normal(0, 2)                            (control coefficients)
+        gamma_k, delta_k ~ Laplace(0, 1)                  (Fourier coefficients)
+        sigma   ~ HalfNormal(2)                           (observation noise)
+
+
+Fitting is done via NUTS (No-U-Turn Sampler) with 1000 tuning + 1000 draws
+per chain, 4 chains, target_accept=0.98, max_treedepth=13. Elevated
+target_accept is required because Hill parameters (alpha, kappa) trade off
+along a curved posterior ridge, a well-documented identification difficulty
+in media mix models.
+
+ROI is reported as the posterior MEDIAN with 2.5%-97.5% credible interval.
+Median (not mean) is used because ratio quantities like ROI have right-skewed
+posteriors; the mean would be pulled up by tail samples and misrepresent the
+typical value.
+
 
 OUTPUTS SAVED (both small, safe to commit)
 ------------------------------------------
   outputs/model2_posterior.nc   parameter posteriors only (a few MB)
   outputs/model2_roi.nc         per-channel ROI samples (tiny)
-  outputs/figures/pymc_marketing_quickstart_v2.png
+  outputs/figures/divergences_tv_adstock_saturation.png
+  outputs/figures/fitted_vs_true_roi.png
 
 RUNTIME
 -------
 Roughly 5-12 minutes on a laptop with 4 CPU cores. Set SMOKE_TEST=True for a
 quick sanity check that runs in ~2 minutes.
 
-Run:  python quickstart_pymc_marketing_v2.py
+Run:  python quickstart_pymc_marketing.py
 """
 import json, os, warnings
 import arviz as az, numpy as np, pandas as pd

@@ -1,19 +1,20 @@
 """
-Posterior predictive check (PPC) for Model 2.
+Posterior predictive check (PPC) for Model 2
 
 Recovery asked: did we get the PARAMETERS right?
 PPC asks:       can the model REPRODUCE the observed revenue?
-
-These are different questions. A model can cover the true parameters yet
-predict poorly (or vice-versa). The PPC overlays the model's predicted
-revenue - with credible bands - on the actual revenue series, and reports
-what fraction of weeks fall inside the 90% band (should be ~90% if the
-model's uncertainty is calibrated).
 
 This script rebuilds the model and draws posterior-predictive samples. The
 slim saved files don't contain predictions (we dropped them to keep the file
 small), so we re-fit. To stay fast, it uses fewer draws than the main run -
 the PPC doesn't need the full sample to show fit quality.
+
+Reads:
+  data/synthetic_clean.csv         clean time-series training data (revenue, spend, controls)
+
+Produces:
+  outputs/figures/posterior_predictive_check.png      time-series coverage band vs actuals
+  outputs/figures/posterior_predictive_scatter.png    predicted vs actual scatter plot
 
 Run:  python make_ppc_figure.py    (~3-5 min; it re-samples a short chain)
 """

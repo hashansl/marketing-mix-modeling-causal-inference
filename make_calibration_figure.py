@@ -13,7 +13,7 @@ Produces:
   outputs/figures/calibration_summary.png    all channels: how calibration
                                               affects each
 
-No sampling.  Run:  python make_calibration_figure.py
+Run:  python make_calibration_figure.py
 """
 import json, os
 import numpy as np, pandas as pd, xarray as xr

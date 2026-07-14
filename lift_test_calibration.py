@@ -20,6 +20,13 @@ Prior conversion:
   We compute the saturation factor from the true parameters (an oracle
   choice for the demonstration; in practice you'd use a plug-in estimate).
 
+Reads:
+  data/true_params.json                ground truth parameter configuration (used as oracle parameters for saturation scaling conversion)
+  data/synthetic_confounded.csv        confounded training dataset (lacking explicit demand context to simulate an unadjusted world)
+
+Produces:
+  outputs/confounded_roi_calibrated.nc NetCDF file containing calibrated posterior ROI parameter arrays
+
 Runs one fit (~10-12 min); saves slim output.
 
 Run:  python lift_test_calibration.py
@@ -74,7 +81,7 @@ df["t"] = np.arange(len(df))
 # We need sum(saturated_scaled). It depends on the (adstock, saturation)
 # parameters of this channel. We use the TRUE parameters here as an oracle
 # plug-in - this is a demonstration of what calibration BUYS when done
-# correctly. (An honest limitation to note in the paper.)
+# correctly.(limitation)
 i_calib = channels.index(CALIB_CHANNEL)
 p = channel_params[CALIB_CHANNEL]
 spend_ch = df[f"{CALIB_CHANNEL}_spend"].values

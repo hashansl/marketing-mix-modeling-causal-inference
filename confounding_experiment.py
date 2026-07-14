@@ -18,10 +18,15 @@ Prediction (state before looking at results): channels with the strongest
 spend-demand link (search demand_beta=0.60, tv=0.45) should show the MOST
 upward bias in Fit A; weak-link channels (email=0.10) the least.
 
-Saves slim outputs so the figure regenerates without re-sampling:
-  outputs/confounded_roi_naive.nc
-  outputs/confounded_roi_adjusted.nc
+Reads:
+  data/synthetic_confounded.csv        historical marketing spend and revenue data influenced by the demand confounder
+  data/true_params.json                ground truth parameter configuration (used to fetch the confounded world's true ROI baseline)
 
+Produces:
+  outputs/confounded_roi_naive.nc      naive posterior ROI samples (backdoor path left open)
+  outputs/confounded_roi_adjusted.nc   adjusted posterior ROI samples (backdoor path closed via controls)
+
+Saves slim outputs so the figure regenerates without re-sampling
 Runtime: two ~10-12 min fits. Set SMOKE_TEST=True for a fast shakeout.
 
 Run:  python confounding_experiment.py

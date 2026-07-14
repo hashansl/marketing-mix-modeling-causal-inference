@@ -15,7 +15,6 @@ Produces:
   outputs/figures/model_comparison.png    per-channel grouped comparison
   outputs/figures/model_comparison_rmse.png   overall ROI RMSE by model
 
-No sampling - runs in seconds.
 Run:  python make_model_comparison.py
 """
 import json
@@ -85,7 +84,6 @@ ax.set_xticks(x); ax.set_xticklabels(channels, fontsize=11)
 ax.set_ylabel("ROI", fontsize=11)
 # ax.set_title("Model comparison: ROI estimate vs truth, by channel", fontsize=12)
 # cap y so the Bayesian tails don't blow out the scale; note clipping
-
 
 # Increase the font size of the actual numbers on the x and y axes
 ax.tick_params(axis="both", which="major", labelsize=12)

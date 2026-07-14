@@ -2,25 +2,27 @@
 Refined analysis of the confounding experiment, accounting for the
 collinearity-induced bias-smearing across correlated channels.
 
-Produces three exhibits:
+Reads:
+  data/true_params.json                  ground truth parameter specification mapping true channel ROIs
+  data/synthetic_confounded.csv          time-series dataset capturing historical marketing spends under demand confounding
+  outputs/confounded_roi_naive.nc        naive posterior ROI samples (backdoor path left open)
+  outputs/confounded_roi_adjusted.nc     adjusted posterior ROI samples (backdoor path closed via controls)
 
+Produces:
   1. outputs/figures/confounding_identified_only.png
      Bar chart restricted to TV, search, social (the identified channels).
-     The clean per-channel story.
-
   2. outputs/figures/confounding_aggregate.png
-     Aggregate metrics: total naive vs total adjusted media contribution
-     as a share of revenue, against truth. Robust to per-channel noise
-     because summing averages it out.
-
+     Aggregate metrics: total naive vs total adjusted media contribution.
   3. outputs/figures/confounding_channel_correlation.png
      The confounded dataset's channel-vs-channel spend correlation matrix.
-     Visualizes WHY the per-channel bias story doesn't decompose cleanly:
-     the channels are correlated with each other (through their shared
-     response to demand), which makes the regression's attribution
-     ambiguous. This is the "collinearity smears confounding bias" story.
 
-No sampling. Run:  python analyze_confounding.py
+The confounded dataset's channel-vs-channel spend correlation matrix.
+Visualizes WHY the per-channel bias story doesn't decompose cleanly:
+the channels are correlated with each other (through their shared
+response to demand), which makes the regression's attribution
+ambiguous. This is the "collinearity smears confounding bias" story.
+
+Run:  python analyze_confounding.py
 """
 import json, os
 import numpy as np, pandas as pd, xarray as xr

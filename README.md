@@ -35,7 +35,7 @@ MARKETING-MIX-MODELING-CAUSAL-INFERENCE/
 │
 ├── models_ols_baselines.py
 ├── quickstart_pymc_marketing.py
-├── quickstart_pymc_marketing_v2.py
+├── quickstart_pymc_marketing.py
 ├── make_recovery_figure.py
 ├── make_model_comparison.py
 ├── make_ppc_figure.py
@@ -94,7 +94,7 @@ python src/test_transforms.py
 python models_ols_baselines.py
 
 # 4. Bayesian MMM (Model 2) — ~12 min
-python quickstart_pymc_marketing_v2.py
+python quickstart_pymc_marketing.py
 
 # 5. Evaluate Model 2 and generate recovery metrics
 python make_recovery_figure.py
