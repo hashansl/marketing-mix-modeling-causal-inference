@@ -35,7 +35,6 @@ MARKETING-MIX-MODELING-CAUSAL-INFERENCE/
 │
 ├── models_ols_baselines.py
 ├── quickstart_pymc_marketing.py
-├── quickstart_pymc_marketing.py
 ├── make_recovery_figure.py
 ├── make_model_comparison.py
 ├── make_ppc_figure.py
