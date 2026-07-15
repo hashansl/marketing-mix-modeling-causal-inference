@@ -57,9 +57,14 @@ for i, ch in enumerate(paid_names):
                     alpha=0.85, label=ch)
     cumulative = cumulative + c
 ax.plot(dates, df["revenue"], color="black", lw=1.0, label="actual revenue")
-ax.set_ylabel("revenue"); ax.set_title(
-    "Contribution decomposition: how much revenue each channel drove")
-ax.legend(fontsize=9, loc="upper left", ncol=2); ax.grid(alpha=0.3)
+ax.set_ylabel("Revenue")
+# ax.set_title(
+    # "Contribution decomposition: how much revenue each channel drove")
+ax.legend(fontsize=12, loc="upper right", ncol=2); ax.grid(alpha=0.3)
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
 fig.tight_layout()
 out = os.path.join(FIG, "robyn_contribution.png")
 fig.savefig(out, dpi=130, bbox_inches="tight"); print(f"saved {out}")
@@ -88,8 +93,12 @@ for i, ch in enumerate(paid_names):
     if hi[i] > ymax:
         ax.annotate(f"CI to {hi[i]:.0f}", (x[i], ymax*0.97),
                     fontsize=7, ha="center", color="#185FA5", rotation=90, va="top")
-ax.set_title("Channel ROI (posterior median + 95% credible interval)\n"
-             "wider intervals = the data is more ambiguous about that channel")
+# ax.set_title("Channel ROI (posterior median + 95% credible interval)\n"
+            #  "wider intervals = the data is more ambiguous about that channel")
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
 ax.grid(alpha=0.3, axis="y")
 fig.tight_layout()
 out = os.path.join(FIG, "robyn_roi_table.png")
@@ -114,9 +123,13 @@ ax.set_xticks(x); ax.set_xticklabels(paid_names, fontsize=11)
 ax.set_ylabel("ROI (posterior median + 95% CI)")
 ymax = min(max(20, max(hi.max(), hi_nocf.max())*1.05), 200)
 ax.set_ylim(0, ymax)
-ax.set_title("Real-data analog of the confounding experiment:\n"
-             "how much do ROI estimates shift when the strongest control is dropped?")
-ax.legend(fontsize=9); ax.grid(alpha=0.3, axis="y")
+# ax.set_title("Real-data analog of the confounding experiment:\n"
+            #  "how much do ROI estimates shift when the strongest control is dropped?")
+ax.legend(fontsize=12); ax.grid(alpha=0.3, axis="y")
+
+# Increase the font size of the actual numbers on the x and y axes
+ax.tick_params(axis="both", which="major", labelsize=14)
+
 fig.tight_layout()
 out = os.path.join(FIG, "robyn_omitted_confounder.png")
 fig.savefig(out, dpi=130, bbox_inches="tight"); print(f"saved {out}")
