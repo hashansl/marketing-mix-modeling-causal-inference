@@ -22,7 +22,8 @@ Can a Bayesian Marketing Mix Model recover the true causal effect (ROI) of each 
 MARKETING-MIX-MODELING-CAUSAL-INFERENCE/
 │
 ├── data/
-│   └── generate_synthetic.py
+│   ├── generate_synthetic.py
+│   └── download_robyn_data.ipynb
 │
 ├── notebooks/
 │
@@ -83,7 +84,7 @@ Two datasets from the same structural model, differing only in how spend is assi
 ## Reproduce
 
 ```bash
-# 1. Generate synthetic data
+# 1. Generate synthetic data and download 
 python data/generate_synthetic.py
 
 # 2. Run the unit tests
