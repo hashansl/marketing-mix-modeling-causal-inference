@@ -127,11 +127,15 @@ Seed is fixed (42) throughout. All scripts save slim netCDF outputs so figure ge
 
 ## Key References
 
-* Jin, Y., Wang, Y., Sun, Y., Chan, D., & Koehler, J. (2017). [Bayesian Methods for Media Mix Modeling with Carryover and Shape Effects.](https://research.google/pubs/bayesian-methods-for-media-mix-modeling-with-carryover-and-shape-effects/) *Google Inc.*
-* Chan, D., & Perry, M. (2017). [Challenges and Opportunities in Media Mix Modeling.](https://research.google/pubs/challenges-and-opportunities-in-media-mix-modeling/) *Google Inc.*
-* Broadbent, S. (1979). One way TV advertisements work. *Journal of the Market Research Society.*
-* Hill, A. V. (1910). The possible effects of the aggregation of the molecules of haemoglobin on its dissociation curves. *Journal of Physiology.*
-* Hernán, M. A., & Robins, J. M. (2020). *Causal Inference: What If.* Chapman & Hall/CRC.
+* Jin, Y., Wang, Y., Sun, Y., Chan, D., & Koehler, J. (2017). [Bayesian Methods for Media Mix Modeling with Carryover and Shape Effects.](https://research.google/pubs/bayesian-methods-for-media-mix-modeling-with-carryover-and-shape-effects/) *Google Research*, 1–34.
+* Zhang, Y., Wurm, M., Li, E., Wakim, A., Kelly, J., Price, B., & Liu, Y. (2024). Media mix model calibration with bayesian priors.
+* Hernán, M., & Robins, J. (2020). *Causal Inference: What If.* Chapman & Hall/CRC.
+* Lewis, R. A., & Rao, J. M. (2015). The unfavorable economics of measuring the returns to advertising. *The Quarterly Journal of Economics*, 130(4), 1941–1973.
+* Gordon, B. R., Zettelmeyer, F., Bhargava, N., & Chapsky, D. (2019). A comparison of approaches to advertising measurement: Evidence from big field experiments at Facebook. *Marketing Science*, 38(2), 193–225.
+* Chan, D., & Perry, M. (2017). [Challenges and Opportunities in Media Mix Modeling.](https://research.google/pubs/challenges-and-opportunities-in-media-mix-modeling/) *Google Inc.*, 16.
+* Neuberg, L. G. (2003). Causality: models, reasoning, and inference, by Judea Pearl, Cambridge University Press, 2000. *Econometric Theory*, 19(4), 675–685.
+* Sun, Y., Wang, Y., Jin, Y., Chan, D., & Koehler, J. (2017). [Geo-level bayesian hierarchical media mix modeling.](https://www.google.com/search?q=https://ai.google/research/pubs/pub46000)
+* Hanssens, D. M., Parsons, L. J., & Schultz, R. L. (2001). *Market response models: Econometric and time series analysis*. Springer.
 
 ```
 
