@@ -100,18 +100,18 @@ python quickstart_pymc_marketing.py
 # 5. Evaluate Model 2 and generate recovery metrics
 python make_recovery_figure.py
 python make_model_comparison.py
-python make_ppc_figure.py              # ~5 min (re-fits a short chain)
+python make_ppc_figure.py              
 
-# 6. Confounding experiments and bias analysis — ~25 min (two fits)
+# 6. Confounding experiments and bias analysis 
 python confounding_experiment.py
 python make_confounding_figure.py
 python analyze_confounding.py
 
-# 7. Lift-test calibration validation — ~12 min
+# 7. Lift-test calibration validation 
 python lift_test_calibration.py
 python make_calibration_figure.py
 
-# 8. Applied fit on external Robyn dataset — ~30 min (two fits)
+# 8. Applied fit on external Robyn dataset 
 python robyn_applied.py
 python make_robyn_figures.py
 
