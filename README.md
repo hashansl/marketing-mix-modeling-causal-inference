@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="documents/img/header.png" alt="Project Header" width="100%">
+</p>
+
 # Can We Trust Marketing ROI? A Synthetic-Data Study of Confounding and Experimental Calibration
 
 **BZAN 593 — Independent Study**
@@ -26,6 +30,7 @@ MARKETING-MIX-MODELING-CAUSAL-INFERENCE/
 │   └── download_robyn_data.py
 │
 ├── notebooks/
+│   └── eda_synthatic_data.ipynb
 │
 ├── src/
 │   ├── transforms.py
