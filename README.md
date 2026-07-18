@@ -23,7 +23,7 @@ MARKETING-MIX-MODELING-CAUSAL-INFERENCE/
 │
 ├── data/
 │   ├── generate_synthetic.py
-│   └── download_robyn_data.ipynb
+│   └── download_robyn_data.py
 │
 ├── notebooks/
 │
@@ -84,8 +84,9 @@ Two datasets from the same structural model, differing only in how spend is assi
 ## Reproduce
 
 ```bash
-# 1. Generate synthetic data and download 
+# 1. Generate synthetic data and robyn data
 python data/generate_synthetic.py
+python data/download_robyn_data.py
 
 # 2. Run the unit tests
 python src/test_transforms.py
